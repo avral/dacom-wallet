@@ -29,7 +29,7 @@
       return {
         drawer: null,
         items: [
-          { icon: 'bubble_chart', title: 'Market', href: 'market' },
+          { icon: 'bubble_chart', title: 'Market', href: '/' },
           { icon: 'bubble_chart', title: 'Balance', href: 'balance' },
           { icon: 'bubble_chart', title: 'History', href: 'history' },
         ],

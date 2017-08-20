@@ -10,7 +10,7 @@ import Login from './auth/Login.vue'
 import SignUp from './auth/SignUp.vue'
 
 import Balance from './components/Balance.vue'
-import Market from './components/Balance.vue'
+import Market from './components/Market.vue'
 import History from './components/History.vue'
 
 
@@ -22,6 +22,11 @@ Vue.prototype.$http = axios
 const router = new VueRouter({
   mode: 'history',
   routes: [
+    {
+      path: '/',
+      name: 'market',
+      component: Market,
+    },
     {
       path: '/login',
       name: 'login',
@@ -39,11 +44,6 @@ const router = new VueRouter({
       meta: {
         auth: true
       }
-    },
-    {
-      path: '/market',
-      name: 'market',
-      component: Market,
     },
     {
       path: '/history',
