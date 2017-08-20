@@ -94,7 +94,7 @@ export default {
 
         if (success) {
           this.account = accountName
-          this.generateKeys(accountName, password)
+          this.keys = Login.generateKeys(accountName, password, ['active', 'owner', 'memo'])
           this.save()
           resolve()
         } else {
