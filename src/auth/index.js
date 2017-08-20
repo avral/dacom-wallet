@@ -53,16 +53,16 @@ export default {
         reject('Account already exist')
       }, () => {
         try {
-          this.generateKeys(accountName, password)
+          var keys = this.generateKeys(accountName, password)
         } catch (e) {
           return reject(e.message)
         }
 
         axios.post(FAUCET_URL, {
           account: accountName,
-          owner_key: this.keys.pubKeys.owner,
-          active_key: this.keys.pubKeys.active,
-          memo_key: this.keys.pubKeys.memo,
+          owner_key: keys.pubKeys.owner,
+          active_key: keys.pubKeys.active,
+          memo_key: keys.pubKeys.memo,
         }).then(() => {
           this.account = accountName
           this.save()
