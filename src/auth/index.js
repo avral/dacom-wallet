@@ -4,7 +4,7 @@ import {ChainStore, FetchChain, Login} from 'bitsharesjs'
 import {Apis, ChainConfig} from 'bitsharesjs-ws'
 
 
-const FAUCET_URL = 'http://127.0.0.1:8000/faucet/'
+const FAUCET_URL = 'http://dacom.io/faucet/'
 
 // DACom BlockChain
 ChainConfig.networks.DACom = {
@@ -15,11 +15,12 @@ ChainConfig.networks.DACom = {
 
 export default {
   account: store.get('account'),
-  keys: store.get('keys'),
+  wifs: store.get('keys'),
   isAuth: false,
+  keys: null,
 
   init() {
-    this.isAuth = !!this.keys
+    this.isAuth = !!this.wifs
 
     return new Promise((resolve, reject) => {
       Apis.instance('ws://5.196.225.197:11011', true).init_promise.then(() => {
@@ -30,19 +31,16 @@ export default {
     })
   },
 
-  generateKeys(accountName, password) {
-    let keys = keys = Login.generateKeys(accountName, password, ['active', 'owner', 'memo'])
-    this.keys = {
-      active: keys.privKeys.active.toWif(),
-      memo: keys.privKeys.memo.toWif(),
-      owner: keys.privKeys.owner.toWif(),
-    }
-  },
-
   save() {
     // Сохраняем данные юзера в локалсторадж
+    this.wifs = {
+      active: this.keys.privKeys.active.toWif(),
+      memo: this.keys.privKeys.memo.toWif(),
+      owner: this.keys.privKeys.owner.toWif(),
+    }
+
     store.set('account', this.account)
-    store.set('keys', this.keys)
+    store.set('keys', this.wifs)
 
     this.isAuth = true
   },
@@ -53,16 +51,16 @@ export default {
         reject('Account already exist')
       }, () => {
         try {
-          var keys = this.generateKeys(accountName, password)
+          this.keys = Login.generateKeys(accountName, password, ['active', 'owner', 'memo'])
         } catch (e) {
           return reject(e.message)
         }
 
         axios.post(FAUCET_URL, {
           account: accountName,
-          owner_key: keys.pubKeys.owner,
-          active_key: keys.pubKeys.active,
-          memo_key: keys.pubKeys.memo,
+          owner_key: this.keys.pubKeys.owner,
+          active_key: this.keys.pubKeys.active,
+          memo_key: this.keys.pubKeys.memo,
         }).then(() => {
           this.account = accountName
           this.save()

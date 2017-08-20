@@ -79,6 +79,7 @@ export default {
           this.$router.push({name: 'balance'})
           this.loading = false
         }, err => {
+          console.log(999, err)
           this.err = err
           this.snackbar = true
           this.loading = false
