@@ -1,6 +1,10 @@
 var path = require('path')
 var webpack = require('webpack')
 
+require("babel-core").transform("code", {
+  presets: ["es2017"]
+})
+
 module.exports = {
   entry: './src/main.js',
   output: {
@@ -64,15 +68,6 @@ if (process.env.NODE_ENV === 'production') {
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: '"production"'
-      }
-    }),
-    new webpack.optimize.UglifyJsPlugin({
-      sourceMap: false,
-      minimize: true,
-      compress: {
-        drop_debugger: true,
-        warnings: false,
-        drop_console: true
       }
     }),
     new webpack.LoaderOptionsPlugin({
